@@ -1,0 +1,48 @@
+/*
+- Candy in the machine
+- Use button to dispense candy; Check for candy
+  - If candy is present, dispense candy
+    - Rotate the Servo to 90 degrees(open)
+    - Blink the Green LED twice a second
+  - If candy is not present, light the red LED
+    - Freely alter the candy amount
+- USE FUNCTIONS
+*/
+
+//variable, servo setup
+#include <Servo.h> 
+Servo myServo;
+int button = 2;
+int green = 9;
+int red = 10;
+int count = 3; // This is how many candies are in the dispenser to start
+
+//setup
+void setup(){ 
+  myServo.attach(5);
+  pinMode(button, INPUT);
+  myServo.write(0); // Set the servo to a position of 0 to start
+}
+
+int candyCount(){
+  if(digitalRead(button) == HIGH) {
+    count = count - 1;
+    myServo.write(90);
+    for(int a = 0; a <= 1; a++){
+      analogWrite(green, 255);
+      delay(250);
+      analogWrite(green, 0);
+      delay(250);
+    }
+    myServo.write(0);
+  } else if(count == 0){
+    while(count == 0){
+      analogWrite(red, 255);
+    }
+  }
+}
+
+void loop(){
+  candyCount();
+
+}
